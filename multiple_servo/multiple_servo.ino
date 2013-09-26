@@ -26,7 +26,10 @@ void setup() {
   pinMode(ledPin1,OUTPUT); 
   myservo.attach(13);
   myservo1.attach(12);
- 
+
+  
+  Serial.print("Transistor-1:");
+  Serial.println( analogRead(transistorPin));
  }
 
 void loop() {
@@ -44,7 +47,8 @@ void loop() {
   float voltage = sensorValue * (5.0 / 1023.0);
   
   transistorValue = analogRead(transistorPin);
-  transistorValue1 = analogRead(transistorPin);
+ 
+  transistorValue1 = analogRead(transistorPin1);
   float transistorVoltage = transistorValue * (5.0 / 1023.0);
   float transistorVoltage1 = transistorValue1 * (5.0 / 1023.0);
   //Serial.println(transistorVoltage);
