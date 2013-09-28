@@ -37,6 +37,9 @@ void loop() {
     angle = 0;
   }
   angle++;
+
+  //delay(10);
+  //Serial.println(angle);  
   
   // read the value from the sensor:
   sensorValue = analogRead(sensorPin);    
