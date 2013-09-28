@@ -10,7 +10,7 @@ Servo servos[12] = {servo0, servo1, servo2, servo3, servo4, servo5, servo6, serv
 
 int servoAngles[12];
 
-int servoDirections[12];
+int servoDirections[12] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int upDownServoTime[4];
 
 boolean photoTransistorHit[12];
@@ -32,6 +32,7 @@ void setup() {
     Serial.print("servoPin");
     Serial.println(servoPin);
     servos[i].attach(servoPin);
+    delay(100);
     servos[i].write(0);
   }
   
@@ -39,9 +40,8 @@ void setup() {
 
 void loop() {
   int i = 0;
+  delay(10);
   for(i = 0; i < 12; i++) {
-    delay(500);
-    Serial.println(i);
     setPhotoTransitorHitStatus(i);
     setNextAngle(i);    
   }
@@ -68,10 +68,10 @@ void setPhotoTransitorHitStatus(int index) {
 }
 
 void setNextAngle(int index) {
-  Serial.print("setNextAngle index: ");
-  Serial.println(index);
-  Serial.print("photoTransistorHit: ");
-  Serial.println(photoTransistorHit[index]);
+  //Serial.print("setNextAngle index: ");
+  //Serial.println(index);
+  //Serial.print("photoTransistorHit: ");
+  //Serial.println(photoTransistorHit[index]);
   
   // determine if it should be moving
   if(photoTransistorHit[index]) {
@@ -80,15 +80,22 @@ void setNextAngle(int index) {
    
   // left-right servo
   if(index > 3) {
-    Serial.print("servoAngles: ");
-    Serial.println(servoAngles[index]);
-    
     if(servoAngles[index] == maxServoAngle || servoAngles[index] == 0){
+        //Serial.println("Switching direction");
         servoDirections[index] =  servoDirections[index] * -1; // flip direction (1 or -1)
     }
+    //Serial.print("servoDirections[index]: ");
+    //Serial.println(servoDirections[index]);
     servoAngles[index] += servoDirections[index];
+    
+    //Serial.print("servoAngles: ");
+    //Serial.println(servoAngles[index]);
     servos[index].write(servoAngles[index]);
     
+    //Serial.print("servos[index]");
+    if(index == 11){
+      Serial.println(servos[index].read());
+    }
   } else { // up-down servo
     //servos[index].write(angle);
   
