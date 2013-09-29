@@ -18,8 +18,8 @@ unsigned long timePhotoHit[12];
 
 // constants
 const int photoTransisterThreshold = 2;
-const unsigned long millisToStayStill = 1000;
-const int maxServoAngle = 100;
+const unsigned long millisToStayStill = 5000;
+const int maxServoAngle = 120;
 
 
 void setup() {
@@ -42,6 +42,7 @@ void loop() {
   int i = 0;
   delay(10);
   for(i = 0; i < 12; i++) {
+    //delay(10);
     setPhotoTransitorHitStatus(i);
     setNextAngle(i);    
   }
@@ -60,8 +61,12 @@ void setPhotoTransitorHitStatus(int index) {
     timePhotoHit[index] = 0;
   }
   int transistorValue = analogRead(photoTransistorPins[index]);
-  float transistorVoltage = transistorValue * (5.0 / 1023.0);   
+  float transistorVoltage = transistorValue * (5.0 / 1023.0); 
+  if(index == 11) {
+    Serial.println(transistorVoltage);
+  }  
   if(transistorVoltage > 2) {
+    Serial.println("hit");
     photoTransistorHit[index] = true;
     timePhotoHit[index] = millis();    
   }  
@@ -75,6 +80,7 @@ void setNextAngle(int index) {
   
   // determine if it should be moving
   if(photoTransistorHit[index]) {
+    Serial.println("Knows it's hit");
     return;       
   }
    
@@ -94,7 +100,7 @@ void setNextAngle(int index) {
     
     //Serial.print("servos[index]");
     if(index == 11){
-      Serial.println(servos[index].read());
+      //Serial.println(servos[index].read());
     }
   } else { // up-down servo
     //servos[index].write(angle);
