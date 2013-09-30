@@ -2,11 +2,12 @@
 
 Servo servo0, servo1, servo2, servo3, servo4, servo5, servo6, servo7, servo8, servo9, servo10, servo11;
 
-// Odd number indexes will be for 1 player, even number index for the other
+// Indexes 0-5 are for player 1, indexes 6-11 are for player 2
+
 int photoTransistorPins[12] = {A11, A10, A9, A8, A7, A6, A5, A4, A3, A2, A1, A0};
 
-// Servo indexes 0-3 are up-down servos
-// Servo indexes 4-11 are left-right servos
+// Servo indexes 2, 4, 6, and 11 are up-down servos
+// All other servo indexes are left-right servos
 Servo servos[12] = {servo0, servo1, servo2, servo3, servo4, servo5, servo6, servo7, servo8, servo9, servo10, servo11};
 
 int servoAngles[12];
