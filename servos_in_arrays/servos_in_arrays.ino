@@ -3,15 +3,13 @@
 Servo servo0, servo1, servo2, servo3, servo4, servo5, servo6, servo7, servo8, servo9, servo10, servo11;
 
 // Odd number indexes will be for 1 player, even number index for the other
-//int photoTransistorPins[12] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11};
 int photoTransistorPins[12] = {A11, A10, A9, A8, A7, A6, A5, A4, A3, A2, A1, A0};
+
 // Servo indexes 0-3 are up-down servos
 // Servo indexes 4-11 are left-right servos
 Servo servos[12] = {servo0, servo1, servo2, servo3, servo4, servo5, servo6, servo7, servo8, servo9, servo10, servo11};
 
 int servoAngles[12];
-boolean isHit;
-
 int servoDirections[12] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 int upDownServoTime[4];
 
@@ -54,31 +52,27 @@ void setPhotoTransitorHitStatus(int index) {
   if(photoTransistorHit[index]) {
     return;
   }
+ 
   int transistorValue = analogRead(photoTransistorPins[index]);
   float transistorVoltage = transistorValue * (5.0 / 1023.0); 
-  if(index == 11) {
-    Serial.println(transistorVoltage);
-  }  
   if(transistorVoltage > 2) {
     Serial.println("hit");
     photoTransistorHit[index] = true;
     timePhotoHit[index] = millis();   
-     isHit=true; 
   }  
 }
 
 void setNextAngle(int index) {
-
   //Serial.println(index);
   // determine if it should be moving
   if(photoTransistorHit[index]) {
-    Serial.print("Knows it's hit");
+    Serial.print("Knows it's hit ");
     Serial.println(index);
     return;       
   }
   
   int maxAngle = maxServoAngle;
-  if(index <= 3){
+  if(index == 11 || index == 6 || index == 4 || index == 2){
     maxAngle = maxUpDownServoAngle;
   }
    
