@@ -19,9 +19,10 @@ unsigned long timePhotoHit[12];
 
 // constants
 const int photoTransisterThreshold = 2;
-const unsigned long millisToStayStill = 5000;
-const int maxServoAngle = 120;
-const int maxUpDownServoAngle = 90;
+const int startingAngle = 30;
+const int maxServoAngle = 90;
+// not being used unless needs adjusting, all servos have the same angle
+//const int maxUpDownServoAngle = 90;
 
 
 void setup() {
@@ -34,7 +35,8 @@ void setup() {
     Serial.print("servoPin");
     Serial.println(servoPin);
     servos[i].attach(servoPin);
-    servos[i].write(0);
+    servoAngles[i] = startingAngle;
+    servos[i].write(startingAngle);
   }
   
 }
@@ -42,7 +44,7 @@ void setup() {
 void loop() {
   int i = 0;
   for(i = 0; i < 12; i++) {
-    delay(10);
+    delay(5);
     setPhotoTransitorHitStatus(i);
     setNextAngle(i);    
   }
@@ -56,28 +58,30 @@ void setPhotoTransitorHitStatus(int index) {
  
   int transistorValue = analogRead(photoTransistorPins[index]);
   float transistorVoltage = transistorValue * (5.0 / 1023.0); 
+  if(index == 2) {
+    Serial.println(transistorVoltage);
+  }
   if(transistorVoltage > 2) {
-    Serial.println("hit");
+    //Serial.println("hit");
     photoTransistorHit[index] = true;
     timePhotoHit[index] = millis();   
   }  
 }
 
 void setNextAngle(int index) {
-  //Serial.println(index);
   // determine if it should be moving
   if(photoTransistorHit[index]) {
-    Serial.print("Knows it's hit ");
-    Serial.println(index);
+    //Serial.print("Knows it's hit ");
+    //Serial.println(index);
     return;       
   }
   
   int maxAngle = maxServoAngle;
-  if(index == 11 || index == 6 || index == 4 || index == 2){
-    maxAngle = maxUpDownServoAngle;
-  }
+  //if(index == 11 || index == 6 || index == 4 || index == 2){
+  //  maxAngle = maxUpDownServoAngle;
+  //}
    
-  if(servoAngles[index] == maxAngle || servoAngles[index] == 0){
+  if(servoAngles[index] == maxAngle || servoAngles[index] == 15){
       servoDirections[index] =  servoDirections[index] * -1; // flip direction (1 or -1)
   }
 
